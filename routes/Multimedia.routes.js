@@ -5,7 +5,7 @@ import {
  getMultimediaContent,
  updateMultimediaContent,
  deleteMultimediaContent,
-} from '../controllers/multimediaContentController';
+} from '../controllers/Multimedia.controller.js';
 
 const router = express.Router();
 
