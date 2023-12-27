@@ -46,6 +46,11 @@ const userSchema = mongoose.Schema({
             message: "The address is not valid"
         }
     },
+    role: {
+        type: String,
+        enum: ['Miembro', 'Lider', 'Administrador'],
+        default: 'Miembro'
+    },
     token: {
         type: String
     },
@@ -68,8 +73,8 @@ userSchema.pre("save", async function(next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.checkPassword = async function(passwordFormulario) {
-    return(await bcrypt.compare(passwordFormulario, this.password));
+userSchema.methods.checkPassword = async function(password) {
+    return(await bcrypt.compare(password, this.password));
 }
 
 export const User = mongoose.model("User", userSchema);
