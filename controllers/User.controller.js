@@ -127,7 +127,7 @@ export const newPassword = async(req, res) => {
 }
 
 export const updateUser = async(req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const userToUpdate = await User.findById(id);
 
