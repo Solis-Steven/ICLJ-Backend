@@ -63,6 +63,7 @@ export const authenticate = async(req, res) => {
             _id: user._id,
             name: user.name,
             email,
+            role: user.role,
             token: JWTGenerator(user._id)
         })
     } else {
@@ -149,4 +150,20 @@ export const updateUser = async(req, res) => {
     } catch (error) {
         res.status(500).json({msg: "Internal Server Error"})
     }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal Server Error' });
+    }
+};
+
+export const profile = async(req, res) => {
+    const { user } = req;
+
+    res.json(user);
 }
