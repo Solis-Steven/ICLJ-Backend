@@ -5,8 +5,10 @@ import {
     authenticate,
     forgotPassword,
     checkToken,
-    newPassword
+    newPassword,
+    updateUser
 } from "../controllers/User.controller.js"
+import { checkAuth } from "../middleware/checkAuth.js";
 
 const router = express.Router();
 
@@ -17,5 +19,6 @@ router.post("/forgot-password", forgotPassword);
 router.route("/forgot-password/:token")
     .get(checkToken)
     .post(newPassword);
+router.put("/edit", checkAuth, updateUser);
 
 export default router;

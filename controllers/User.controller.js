@@ -125,3 +125,28 @@ export const newPassword = async(req, res) => {
         console.log(error);
     }
 }
+
+export const updateUser = async(req, res) => {
+    const { id } = req.body;
+
+    const userToUpdate = await User.findById(id);
+
+    if(!userToUpdate) {
+        const error = new Error("The user doesn't exists");
+        return(res.status(404).json({msg: error.message}));
+    }
+
+    const {name, phone, address, role} = req.body
+    
+    userToUpdate.name = name || userToUpdate.name;
+    userToUpdate.phone = phone || userToUpdate.phone;
+    userToUpdate.address = address || userToUpdate.address;
+    userToUpdate.role = role || userToUpdate.role;
+
+    try {
+        const userSaved = await userToUpdate.save();
+        res.json(userSaved);
+    } catch (error) {
+        res.status(500).json({msg: "Internal Server Error"})
+    }
+}
