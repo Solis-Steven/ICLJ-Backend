@@ -1,4 +1,4 @@
-import FixedEvent from '../models/fixedEventModel';
+import FixedEvent from '../models/FixedEvent.model.js';
 
 export const getAllFixedEvents = async (req, res) => {
  try {
