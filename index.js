@@ -21,6 +21,8 @@ app.use("/api/users", userRoutes)
 app.use("/api/sermons", sermonRoutes)
 app.use("/api/testimonials", testimonialRoutes)
 
+
+
 const server = app.listen(8000, () => {
     console.log("Server runs");
 })

@@ -29,6 +29,9 @@ export const createAnnouncement = async (req, res) => {
 export const getAnnouncement = async (req, res) => {
  try {
     const announcement = await Announcement.findById(req.params.id);
+    if(!announcement){
+      return res.status(404).json({ message: 'Anuncio no encontrado' });
+    }
     res.status(200).json(announcement);
  } catch (error) {
     res.status(400).json({ message: error.message });
@@ -36,26 +39,31 @@ export const getAnnouncement = async (req, res) => {
 };
 
 export const updateAnnouncement = async (req, res) => {
- try {
-    const announcement = await Announcement.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: req.body.name,
-        description: req.body.description,
-        date: req.body.date,
-        image: req.body.image,
-      },
-      { new: true }
-    );
+   const AnnouncementToUpdate = await Announcement.findById(req.params.id);
+   if(!AnnouncementToUpdate) {
+     return res.status(404).json({ message: 'Anuncio no encontrado' });
+   }
 
-    res.status(200).json(announcement);
+   const {name, description, date, image} = req.body
+   AnnouncementToUpdate.name = name || AnnouncementToUpdate.name;
+    AnnouncementToUpdate.description = description || AnnouncementToUpdate.description;
+    AnnouncementToUpdate.date = date || AnnouncementToUpdate.date;
+    AnnouncementToUpdate.image = image || AnnouncementToUpdate.image;
+ try {
+   const AnnouncementSaved = await AnnouncementToUpdate.save();
+   res.json(AnnouncementSaved);
+  
  } catch (error) {
-    res.status(400).json({ message: error.message });
+   res.status(500).json({msg: "Internal Server Error"})
  }
 };
 
 export const deleteAnnouncement = async (req, res) => {
  try {
+   const Announcement = await Announcement.findById(req.params.id);
+   if(!Announcement) {
+     return res.status(404).json({ message: 'Anuncio no encontrado' });
+   }
     await Announcement.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Announcement deleted successfully' });
  } catch (error) {
