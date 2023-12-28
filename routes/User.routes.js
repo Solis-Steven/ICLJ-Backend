@@ -19,6 +19,6 @@ router.post("/forgot-password", forgotPassword);
 router.route("/forgot-password/:token")
     .get(checkToken)
     .post(newPassword);
-router.put("/edit", checkAuth, updateUser);
+router.put("/edit/:id", checkAuth, updateUser);
 
 export default router;
