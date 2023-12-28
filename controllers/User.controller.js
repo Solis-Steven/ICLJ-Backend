@@ -17,7 +17,10 @@ export const register = async (req, res) => {
         user.token = idGenerator();
         await user.save();
 
-        res.json({msg: "User Created Correctly, Check your Email to Confirm your Account"})
+        const {name, token} = user
+
+        res.json({msg: "User Created Correctly, Check your Email to Confirm your Account", 
+        user: {email, name,token}})
     } catch (error) {
         res.status(400).json(`Error: ${error.message}`);
     }
