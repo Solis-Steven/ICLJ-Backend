@@ -10,7 +10,8 @@ const SermonSchema = new mongoose.Schema({
         require: true
     },
     sermon: {
-        type: String
+        type: String,
+        require: true
     }
 });
 
