@@ -5,7 +5,7 @@ import {
  getFixedEvent,
  updateFixedEvent,
  deleteFixedEvent,
-} from '../controllers/fixedEventController';
+} from '../controllers/FixedEvent.controller.js';
 
 const router = express.Router();
 
