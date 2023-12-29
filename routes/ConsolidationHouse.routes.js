@@ -8,7 +8,7 @@ import {
  getConsolidationHouse,
  updateConsolidationHouse,
  deleteConsolidationHouse,
-} from '../controllers/consolidationHouseController';
+} from '../controllers/ConsolidationHouse.controller.js';
 
 const router = express.Router();
 

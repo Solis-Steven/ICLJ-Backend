@@ -1,5 +1,5 @@
 // Controlador ConsolidationHouse
-import ConsolidationHouse from '../models/ConsolidationHouse';
+import ConsolidationHouse from '../models/ConsolidationHouse.model.js';
 
 export const getAllConsolidationHouses = async (req, res) => {
  try {
