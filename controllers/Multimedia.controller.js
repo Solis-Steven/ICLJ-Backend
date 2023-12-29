@@ -11,9 +11,6 @@ export const getAllMultimediaContents = async (req, res) => {
 
 export const createMultimediaContent = async (req, res) => {
  try {
-   if(!req.body.name || req.body.ref){
-      return res.status(400).json({ message:  'Por favor, ingrese todos los campos requeridos'  });
-   }
     const multimediaContent = new MultimediaContent({
       name: req.body.name,
       ref: req.body.ref,
@@ -39,26 +36,23 @@ export const getMultimediaContent = async (req, res) => {
 };
 
 export const updateMultimediaContent = async (req, res) => {
- try {
-   if(!req.body.name || req.body.ref){
-      return res.status(400).json({ message:  'Por favor, ingrese todos los campos requeridos'  });
-   }
-   const multimediaExist = await MultimediaContent.findById(req.params.id);
-   if(!multimediaExist){
-      return res.status(404).json({ message: 'MultimediaContent not found' });
-   }
-    const multimediaContent = await MultimediaContent.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: req.body.name,
-        ref: req.body.ref,
-      },
-      { new: true }
-    );
+   const { id } = req.params;
 
-    res.status(200).json(multimediaContent);
+   const multimediaToUpdate = await MultimediaContent.findById(id);
+   if(!multimediaToUpdate) {
+      const error = new Error("The multimedia Content doesn't exists");
+      return(res.status(404).json({msg: error.message}));
+  }
+  const {name, ref} = req.body
+    
+  multimediaToUpdate.name = name || multimediaToUpdate.name;
+  multimediaToUpdate.ref = ref || multimediaToUpdate.ref;
+  
+ try {
+   const multimediaSave = await multimediaToUpdate.save();
+   res.json(multimediaSave);
  } catch (error) {
-    res.status(400).json({ message: error.message });
+   res.status(500).json({msg: "Internal Server Error"})
  }
 };
 
