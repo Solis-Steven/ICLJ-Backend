@@ -6,13 +6,14 @@ import {
  updateFixedEvent,
  deleteFixedEvent,
 } from '../controllers/FixedEvent.controller.js';
-
+import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 
-router.get('/', getAllFixedEvents);
-router.post('/', createFixedEvent);
-router.get('/:id', getFixedEvent);
-router.put('/:id', updateFixedEvent);
-router.delete('/:id', deleteFixedEvent);
-
+router.route('/')
+    .get(checkAuth, getAllFixedEvents)
+    .post(checkAuth,  createFixedEvent)
+router.route('/:id')
+    .get(checkAuth,  getFixedEvent)
+    .put(checkAuth, updateFixedEvent)
+    .delete(checkAuth, deleteFixedEvent);
 export default router;
