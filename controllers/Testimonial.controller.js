@@ -44,7 +44,7 @@ export const deleteTestimonial = async (req, res) => {
             return res.status(404).json({ msg: "El testimonio no existe" });
         }
 
-        res.json(deletedTestimonial);
+        res.json({msg: "Testimonio eliminado correctamente"});
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Error al eliminar testimonio" });
