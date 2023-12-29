@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 const ConsolidationHouseSchema = new mongoose.Schema({
  name: { type: String, required: true },
- leader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+ leader: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require:true },
  date: { type: Date, default: Date.now },
  address: { type: String, required: true },
 });
