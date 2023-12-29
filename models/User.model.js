@@ -57,6 +57,10 @@ const userSchema = mongoose.Schema({
     confirmed: {
         type: Boolean,
         default: false
+    },
+    isDesabled: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

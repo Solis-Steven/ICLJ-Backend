@@ -131,8 +131,7 @@ export const newPassword = async(req, res) => {
     
         res.json({msg: "Contraseña modificada correctamente"});
     } catch (error) {
-        res.status(500).json({msg: "Error al cambiar la contraseña"});
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -157,7 +156,7 @@ export const updateUser = async(req, res) => {
         const userSaved = await userToUpdate.save();
         res.json(userSaved);
     } catch (error) {
-        res.status(500).json({msg: "Internal Server Error"})
+        console.error(error);
     }
 }
 
@@ -167,7 +166,6 @@ export const getAllUsers = async (req, res) => {
         res.json(users);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
     }
 };
 
@@ -176,3 +174,22 @@ export const profile = async(req, res) => {
 
     res.json(user);
 }
+
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const userToDelete = await User.findById(id);
+
+        if (!userToDelete) {
+            const error = new Error("El usuario no existe");
+            return res.status(404).json({ msg: error.message });
+        }
+
+        await userToDelete.deleteOne();
+        
+        res.json({ msg: "Usuario eliminado correctamente", user: userToDelete });
+    } catch (error) {
+        console.error(error);
+    }
+};

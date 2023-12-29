@@ -8,7 +8,8 @@ import {
     newPassword,
     updateUser,
     getAllUsers,
-    profile
+    profile,
+    deleteUser
 } from "../controllers/User.controller.js"
 import { checkAuth } from "../middleware/checkAuth.js";
 
@@ -23,6 +24,7 @@ router.route("/forgot-password/:token")
     .get(checkToken)
     .post(newPassword);
 router.put("/edit/:id", checkAuth, updateUser);
-router.get("/profile", checkAuth, profile)
+router.get("/profile", checkAuth, profile);
+router.delete("/delete/:id", checkAuth, deleteUser);
 
 export default router;
