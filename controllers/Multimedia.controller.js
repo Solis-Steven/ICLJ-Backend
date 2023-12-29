@@ -1,4 +1,4 @@
-import MultimediaContent from '../models/multimediaContentModel';
+import MultimediaContent from '../models/Multimedia.model.js';
 
 export const getAllMultimediaContents = async (req, res) => {
  try {
