@@ -1,7 +1,5 @@
 // Router ConsolidationHouse
 import express from 'express';
-
-
 import {
  getAllConsolidationHouses,
  createConsolidationHouse,
@@ -9,13 +7,14 @@ import {
  updateConsolidationHouse,
  deleteConsolidationHouse,
 } from '../controllers/ConsolidationHouse.controller.js';
-
+import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
-
-router.get('/', getAllConsolidationHouses);
-router.post('/', createConsolidationHouse);
-router.get('/:id', getConsolidationHouse);
-router.put('/:id', updateConsolidationHouse);
-router.delete('/:id', deleteConsolidationHouse);
+router.route('/')
+    .get(checkAuth, getAllConsolidationHouses)
+    .post(checkAuth,  createConsolidationHouse)
+router.route('/:id')
+    .get(checkAuth,  getConsolidationHouse)
+    .put(checkAuth, updateConsolidationHouse)
+    .delete(checkAuth, deleteConsolidationHouse);
 
 export default router;

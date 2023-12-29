@@ -12,6 +12,9 @@ export const getAllConsolidationHouses = async (req, res) => {
 
 export const createConsolidationHouse = async (req, res) => {
  const { name, leader, date, address } = req.body;
+ if (!name || !leader || !date || !address) {
+   return res.status(400).json({ message: 'Por favor, ingrese todos los campos requeridos' });
+}
  const newConsolidationHouse = new ConsolidationHouse({ name, leader, date, address });
 
  try {
@@ -25,7 +28,10 @@ export const createConsolidationHouse = async (req, res) => {
 export const getConsolidationHouse = async (req, res) => {
  try {
     const consolidationHouse = await ConsolidationHouse.findById(req.params.id);
-    res.status(200).json(consolidationHouse);
+    if (!consolidationHouse) {
+      return res.status(404).json({ message: 'ConsolidationHouse not found' });
+   }
+   res.status(200).json(consolidationHouse);
  } catch (error) {
     res.status(500).json({ message: error.message });
  }
@@ -33,6 +39,9 @@ export const getConsolidationHouse = async (req, res) => {
 
 export const updateConsolidationHouse = async (req, res) => {
  const { name, leader, date, address } = req.body;
+ if (!name || !leader || !date || !address) {
+   return res.status(400).json({ message: 'Por favor, ingrese todos los campos requeridos' });
+}
  const updatedConsolidationHouse = { name, leader, date, address };
 
  try {
@@ -44,10 +53,15 @@ export const updateConsolidationHouse = async (req, res) => {
 };
 
 export const deleteConsolidationHouse = async (req, res) => {
- try {
-    await ConsolidationHouse.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'ConsolidationHouse deleted successfully' });
- } catch (error) {
-    res.status(500).json({ message: error.message });
- }
-};
+   try {
+      const consolidationHouse = await ConsolidationHouse.findById(req.params.id);
+      if (!consolidationHouse) {
+         return res.status(404).json({ message: 'ConsolidationHouse not found' });
+      }
+  
+      await ConsolidationHouse.findByIdAndDelete(req.params.id);
+      res.status(200).json({ message: 'ConsolidationHouse deleted successfully' });
+   } catch (error) {
+      res.status(500).json({ message: error.message });
+   }
+  };
