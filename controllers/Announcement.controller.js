@@ -11,9 +11,6 @@ export const getAllAnnouncements = async (req, res) => {
 
 export const createAnnouncement = async (req, res) => {
  try {
-   if (!req.body.name || !req.body.description || !req.body.date || !req.body.image) {
-      return res.status(400).json({ message: 'Por favor, ingrese todos los campos requeridos' });
-    }
     const announcement = new Announcement({
       name: req.body.name,
       description: req.body.description,
@@ -42,28 +39,22 @@ export const getAnnouncement = async (req, res) => {
 };
 
 export const updateAnnouncement = async (req, res) => {
- try {
-   if (!req.body.name || !req.body.description || !req.body.date || !req.body.image) {
-      return res.status(400).json({ message: 'Por favor, ingrese todos los campos requeridos' });
-    }
-    const AnnouncementExist = await Announcement.findById(req.params.id);
-    if(!Announcement) {
-      return res.status(404).json({ message: 'Anuncio no encontrado' });
-    }
-    const announcement = await Announcement.findByIdAndUpdate(
-      req.params.id,
-      {
-        name: req.body.name,
-        description: req.body.description,
-        date: req.body.date,
-        image: req.body.image,
-      },
-      { new: true }
-    );
+   const AnnouncementToUpdate = await Announcement.findById(req.params.id);
+   if(!AnnouncementToUpdate) {
+     return res.status(404).json({ message: 'Anuncio no encontrado' });
+   }
 
-    res.status(200).json(announcement);
+   const {name, description, date, image} = req.body
+   AnnouncementToUpdate.name = name || AnnouncementToUpdate.name;
+    AnnouncementToUpdate.description = description || AnnouncementToUpdate.description;
+    AnnouncementToUpdate.date = date || AnnouncementToUpdate.date;
+    AnnouncementToUpdate.image = image || AnnouncementToUpdate.image;
+ try {
+   const AnnouncementSaved = await AnnouncementToUpdate.save();
+   res.json(AnnouncementSaved);
+  
  } catch (error) {
-    res.status(400).json({ message: error.message });
+   res.status(500).json({msg: "Internal Server Error"})
  }
 };
 
