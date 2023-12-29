@@ -17,14 +17,14 @@ const userSchema = mongoose.Schema({
             validator: function (value) {
                 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
             },
-            message: "The email is not valid"
+            message: "El correo no es válido"
         }
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        minlength: [6, "The password must be at least 6 characters long"]
+        minlength: [6, "La contraseña debe ser de al menos 6 caracteres"]
     },
     phone: {
         type: String,
@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
             validator: function (value) {
                 return /^\d{8}$/.test(value);
             },
-            message: "The phone number must contain exactly 8 digits"
+            message: "El número de teléfono debe contener 8 dígitos"
         }
     },
     address: {
@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema({
             validator: function (value) {
                 return /^[a-zA-Z0-9\s,.-]+$/.test(value);
             },
-            message: "The address is not valid"
+            message: "La dirección de residencia no es válida"
         }
     },
     role: {
@@ -55,6 +55,10 @@ const userSchema = mongoose.Schema({
         type: String
     },
     confirmed: {
+        type: Boolean,
+        default: false
+    },
+    isDesabled: {
         type: Boolean,
         default: false
     }
