@@ -34,15 +34,33 @@ const ActivitieContentSchema = new mongoose.Schema({
         }
     },
     users: {
-        type: [String], 
-        default: [],  
+        type: [{
+            name: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            phone: {
+                type: String,
+                trim: true,
+            },
+            assisted:  {
+                type: Boolean,
+                default: false,
+                required: true,
+                trim: true
+            }
+            // type: mongoose.Schema.Types.ObjectId,
+            // ref: "User"
+        }],
+        default: [],
         validate: {
             validator: function (value) {
-                return Array.isArray(value);
+                return Array.isArray(value) && value.every(item => typeof item === 'object');
             },
             message: "Invalid list of users"
         }
-    },
+    }
     
 });
 

@@ -1,8 +1,8 @@
-import Activitie from '../models/Activitie.model';
+import ActivitieContent from '../models/Activitie.model.js';
 
 export const agendActivitie = async (req, res) => {
     try {
-        const newActivitie = new Activitie(req.body);
+        const newActivitie = new ActivitieContent(req.body);
         await newActivitie.save();
         res.json(newActivitie);
     } catch (error) {
@@ -13,7 +13,7 @@ export const agendActivitie = async (req, res) => {
 
 export const editActivitie = async (req, res) => {
     const { id } = req.params;
-    const existingActivitie = await Activitie.findById(id);
+    const existingActivitie = await ActivitieContent.findById(id);
     
     if (!existingActivitie) {
         return res.status(404).json({ msg: "Activitie doesn't exists" });
@@ -42,7 +42,7 @@ export const deleteActivitie = async (req, res) => {
     console.log(id)
 
     try {
-        const deletedActivitie = await Activitie.findByIdAndDelete(id);
+        const deletedActivitie = await ActivitieContent.findByIdAndDelete(id);
 
         if (!deletedActivitie) {
             return res.status(404).json({ msg: "Activitie doesn't exists" });
@@ -58,25 +58,23 @@ export const deleteActivitie = async (req, res) => {
 export const getActivitie = async (req, res) => {
     try {
         const { id } = req.params;
-        const Activitie = await Activitie.findById(id);
-
-        if (!Activitie) {
+        const Activities = await ActivitieContent.findById(id);
+        if (!Activities) {
             return res.status(404).json({ msg: 'Activitie not found' });
         }
-
-        res.json(Activitie);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
-    }
-}
-
-export const getAllActivities = async (res) => {
-    try {
-        const Activities = await Activitie.find();
         res.json(Activities);
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Internal Server Error' });
     }
 }
+
+export const getAllActivities = async (req, res) => {
+    try {
+        const Activities = await ActivitieContent.find();
+        res.json(Activities);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+};
