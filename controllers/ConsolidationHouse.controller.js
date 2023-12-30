@@ -11,8 +11,7 @@ export const getAllConsolidationHouses = async (req, res) => {
 };
 
 export const createConsolidationHouse = async (req, res) => {
- const { name, leader, date, address } = req.body;
-
+ const {name, leader, date, address} = req.body;
  const newConsolidationHouse = new ConsolidationHouse({ name, leader, date, address });
  try {
     await newConsolidationHouse.save();
@@ -35,7 +34,7 @@ export const getConsolidationHouse = async (req, res) => {
 };
 
 export const updateConsolidationHouse = async (req, res) => {
-   const ConsolidationHouseToUpdate = await User.findById(req.params.id);
+   const ConsolidationHouseToUpdate = await ConsolidationHouse.findById(req.params.id);
 
    if(!ConsolidationHouseToUpdate) {
        const error = new Error("The ConsolidationHouses doesn't exists");
