@@ -7,7 +7,7 @@ export const register = async (req, res) => {
     const existsUser = await User.findOne({email});
 
     if(existsUser) {
-        const error = new Error("User already registered");
+        const error = new Error("El usuario ya está registrado");
         
         return(res.status(400).json({msg: error.message}));
     }
@@ -17,8 +17,16 @@ export const register = async (req, res) => {
         user.token = idGenerator();
         await user.save();
 
-        res.json({msg: "User Created Correctly, Check your Email to Confirm your Account"})
+        const {name, token} = user
+
+        res.json({msg: "User Created Correctly, Check your Email to Confirm your Account", 
+        user: {email, name,token}})
     } catch (error) {
+        if (error.errors) {
+            const validationErrors = Object.values(error.errors).map((err) => err.message);
+            return res.status(400).json({ msg: validationErrors });
+        }
+
         res.status(400).json(`Error: ${error.message}`);
     }
 }
@@ -29,7 +37,7 @@ export const confirmAccount = async(req, res) => {
     const userToConfirm = await User.findOne({token});
 
     if(!userToConfirm) {
-        const error = new Error("The token is not valid");
+        const error = new Error("El token no es válido");
         return(res.status(404).json({msg: error.message}));
     }
 
@@ -37,7 +45,7 @@ export const confirmAccount = async(req, res) => {
         userToConfirm.confirmed = true;
         userToConfirm.token = "";
         await userToConfirm.save();
-        res.json({msg: "User confirmed successfully"})
+        res.json({msg: "Usuario confirmado correctamente"})
     } catch (error) {
         console.log(error);
     }
@@ -49,12 +57,12 @@ export const authenticate = async(req, res) => {
     const user = await User.findOne({email});
 
     if(!user) {
-        const error = new Error("The user doesn't exists");
+        const error = new Error("El usuario no existe");
         return(res.status(404).json({msg: error.message}));
     }
 
     if(!user.confirmed) {
-        const error = new Error("Your account has not been confirmed");
+        const error = new Error("Tu cuenta no ha sido confirmada");
         return(res.status(403).json({msg: error.message}));
     }
 
@@ -67,7 +75,7 @@ export const authenticate = async(req, res) => {
             token: JWTGenerator(user._id)
         })
     } else {
-        const error = new Error("The password is not correct");
+        const error = new Error("La contraseña es incorrecta");
         return(res.status(403).json({msg: error.message}));
     }
 }
@@ -78,7 +86,7 @@ export const forgotPassword = async(req, res) => {
     const user = await User.findOne({email});
     
     if(!user) {
-        const error = new Error("The user doesn't exists");
+        const error = new Error("El usuario no existe");
         return(res.status(404).json({msg: error.message}));
     }
 
@@ -86,7 +94,7 @@ export const forgotPassword = async(req, res) => {
         user.token = idGenerator();
         await user.save();
 
-        res.json({msg: "We have sent an email with instructions"})
+        res.json({msg: "Hemos enviado un email con las instrucciones", token: user.token})
     } catch (error) {
         console.log(error);
     }
@@ -95,35 +103,35 @@ export const forgotPassword = async(req, res) => {
 export const checkToken = async(req, res) => {
     const { token } = req.params;
 
-    const isValidToken = await Usuario.findOne({token});
+    const isValidToken = await User.findOne({token});
 
     if(!isValidToken) {
-        const error = new Error("The token it not valid");
+        const error = new Error("El token no es válido");
         return(res.status(404).json({msg: error.message}));
     }
 
-    res.json({msg: "Token valid and user exists"})
+    res.json({msg: "Token válido y el usuario existe"})
 }
 
 export const newPassword = async(req, res) => {
     const { token } = req.params;
-    const { password } = req.body;
+    const { newPassword } = req.body;
 
     const user = await User.findOne({token});
 
     if(!user) {
-        const error = new Error("The token is not valid");
+        const error = new Error("El token no es válido");
         return(res.status(404).json({msg: error.message}));
     }
 
     try {
-        user.password = password;
+        user.password = newPassword;
         user.token = "";
         await user.save();
     
-        res.json({msg: "Password modified succesfully"});
+        res.json({msg: "Contraseña modificada correctamente"});
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -133,7 +141,7 @@ export const updateUser = async(req, res) => {
     const userToUpdate = await User.findById(id);
 
     if(!userToUpdate) {
-        const error = new Error("The user doesn't exists");
+        const error = new Error("El usuario no existe");
         return(res.status(404).json({msg: error.message}));
     }
 
@@ -148,7 +156,7 @@ export const updateUser = async(req, res) => {
         const userSaved = await userToUpdate.save();
         res.json(userSaved);
     } catch (error) {
-        res.status(500).json({msg: "Internal Server Error"})
+        console.error(error);
     }
 }
 
@@ -158,7 +166,6 @@ export const getAllUsers = async (req, res) => {
         res.json(users);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
     }
 };
 
@@ -167,3 +174,22 @@ export const profile = async(req, res) => {
 
     res.json(user);
 }
+
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const userToDelete = await User.findById(id);
+
+        if (!userToDelete) {
+            const error = new Error("El usuario no existe");
+            return res.status(404).json({ msg: error.message });
+        }
+
+        await userToDelete.deleteOne();
+        
+        res.json({ msg: "Usuario eliminado correctamente", user: userToDelete });
+    } catch (error) {
+        console.error(error);
+    }
+};
