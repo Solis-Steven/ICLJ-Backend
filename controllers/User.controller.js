@@ -138,31 +138,36 @@ export const newPassword = async(req, res) => {
 export const updateUser = async(req, res) => {
     const { id } = req.params;
 
-    const userToUpdate = await User.findById(id);
+    const userToUpdate = await User.findById(id).select("-password -createdAt -updatedAt-__v");
 
     if(!userToUpdate) {
         const error = new Error("El usuario no existe");
         return(res.status(404).json({msg: error.message}));
     }
 
-    const {name, phone, address, role} = req.body
     
-    userToUpdate.name = name || userToUpdate.name;
-    userToUpdate.phone = phone || userToUpdate.phone;
-    userToUpdate.address = address || userToUpdate.address;
-    userToUpdate.role = role || userToUpdate.role;
-
     try {
+        const {name, phone, address, role} = req.body
+        
+        userToUpdate.name = name || userToUpdate.name;
+        userToUpdate.phone = phone || userToUpdate.phone;
+        userToUpdate.address = address || userToUpdate.address;
+        userToUpdate.role = role || userToUpdate.role;
         const userSaved = await userToUpdate.save();
-        res.json(userSaved);
+        res.json({msg: "Usuario editado correctamente", userSaved});
     } catch (error) {
-        console.error(error);
+        if (error.errors) {
+            const validationErrors = Object.values(error.errors).map((err) => err.message);
+            return res.status(400).json({ msg: validationErrors });
+        }
+
+        res.status(400).json(`Error: ${error.message}`);
     }
 }
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find({confirmed: true}).select("-password -createdAt -updatedAt-__v");
         res.json(users);
     } catch (error) {
         console.error(error);
@@ -179,7 +184,7 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const userToDelete = await User.findById(id);
+        const userToDelete = await User.findById(id).select("-password -createdAt -updatedAt-__v");
 
         if (!userToDelete) {
             const error = new Error("El usuario no existe");
