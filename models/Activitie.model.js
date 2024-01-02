@@ -4,7 +4,7 @@ const ActivitieContentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
         trim: true
     },
     date: {
@@ -12,9 +12,9 @@ const ActivitieContentSchema = new mongoose.Schema({
         trim: true,
         validate: {
             validator: function (value) {
-                return /^\d{2}-\d{2}-\d{4}$/.test(value);
+                return /^\d{4}-\d{2}-\d{2}$/.test(value);
             },
-            message: "The date is not in the correct format (dd-mm-yyyy)"
+            message: "The date is not in the correct format (yyyy-dd-mm)"
         }
     },
     time: {
@@ -22,16 +22,15 @@ const ActivitieContentSchema = new mongoose.Schema({
         trim: true,
         validate: {
             validator: function (value) {
-                return /^(1[0-2]|0?[1-9]):[0-5][0-9]([ap]m)?$/.test(value.toLowerCase());
+                return /^(2[0-3]|1[0-9]|0?[0-9]):[0-5][0-9]?$/.test(value.toLowerCase());
             },
-            message: "The time is not in the correct format (h:mm[am|pm])"
+            message: "The time is not in the correct format (hh:mm)"
         }
     },
     assistance: {
         type: Boolean,
-        required: function () {
-            return this.assistance === true;
-        }
+        default: false,
+        trim: true,
     },
     users: {
         type: [{
@@ -49,16 +48,19 @@ const ActivitieContentSchema = new mongoose.Schema({
                 default: false,
                 required: true,
                 trim: true
+            },
+            state: {
+                type: Boolean,
+                default: true,
+                trim: true
             }
-            // type: mongoose.Schema.Types.ObjectId,
-            // ref: "User"
         }],
         default: [],
         validate: {
             validator: function (value) {
-                return Array.isArray(value) && value.every(item => typeof item === 'object');
+                return this.assistance || (Array.isArray(value) && value.every(item => item.assisted));
             },
-            message: "Invalid list of users"
+            message: "Can only add users if assistance is true"
         }
     }
     

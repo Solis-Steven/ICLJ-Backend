@@ -4,7 +4,8 @@ import {
     editActivitie,
     deleteActivitie,
     getAllActivities,
-    getActivitie
+    getActivitie,
+    addActivitieUser
 } from "../controllers/Activitie.controller.js"
 import { checkAuth } from "../middleware/checkAuth.js";
 
@@ -15,6 +16,7 @@ router.route("/")
     .get(checkAuth, getAllActivities)
 router.route("/:id")
     .get(checkAuth, getActivitie)
+    .post(checkAuth, addActivitieUser)
     .put(checkAuth, editActivitie)
     .delete(checkAuth, deleteActivitie);
 

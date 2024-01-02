@@ -3,13 +3,19 @@ import ActivitieContent from '../models/Activitie.model.js';
 export const agendActivitie = async (req, res) => {
     try {
         const newActivitie = new ActivitieContent(req.body);
+        await newActivitie.validate();
+
         await newActivitie.save();
         res.json(newActivitie);
     } catch (error) {
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ msg: error.message });
+        }
+
         console.error(error);
         res.status(500).json({ msg: 'Internal Server Error' });
     }
-}
+};
 
 export const editActivitie = async (req, res) => {
     const { id } = req.params;
@@ -25,7 +31,7 @@ export const editActivitie = async (req, res) => {
         existingActivitie.name = name || existingActivitie.name;
         existingActivitie.date = date || existingActivitie.date;
         existingActivitie.time = time || existingActivitie.time;
-        existingActivitie.assistance = assistance || existingActivitie.assistance;
+        existingActivitie.assistance = assistance;
         existingActivitie.users = users || existingActivitie.users;
 
         const updatedActivitie = await existingActivitie.save();
@@ -76,5 +82,29 @@ export const getAllActivities = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });
+    }
+};
+export const addActivitieUser = async (req, res) => {
+    const { id: activityId } = req.params;
+    const { name, phone } = req.body;
+    try {
+        if ( !name || !phone === undefined) {
+            return res.status(400).json({ msg: "Invalid user data in the request body" });
+        }
+        const user = { name, phone };
+
+        const activity = await ActivitieContent.findById(activityId);
+        if (!activity) {
+            return res.status(404).json({ msg: "Activity doesn't exist" });
+        }
+        if (!user) {
+            return res.status(400).json({ msg: "User is required in the request body" });
+        }
+        activity.users.push(user);
+        const updatedActivity = await activity.save();
+        res.json(updatedActivity);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal Server Error' });
     }
 };
