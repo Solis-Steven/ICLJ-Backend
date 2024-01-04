@@ -58,9 +58,9 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isDesabled: {
+    isActive: {
         type: Boolean,
-        default: false
+        default: true
     }
 }, {
     timestamps: true

@@ -69,7 +69,10 @@ export const getTestimonial = async (req, res) => {
 
 export const getAllTestimonials = async (req, res) => {
     try {
-        const testimonials = await Testimonial.find();
+        const { page = 1, limit = 10 } = req.query;
+        const testimonials = await Testimonial.find()
+            .skip((page - 1) * limit)
+            .limit(limit);
         res.json(testimonials);
     } catch (error) {
         console.error(error);

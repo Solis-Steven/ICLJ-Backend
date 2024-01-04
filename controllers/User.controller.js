@@ -167,12 +167,18 @@ export const updateUser = async(req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({confirmed: true}).select("-password -createdAt -updatedAt-__v");
+        const { page = 1, limit = 10, isActive = true } = req.query;
+        const users = await User.find({ confirmed: true,
+            isActive })
+            .select("-password -createdAt -updatedAt-__v")
+            .skip((page - 1) * limit)
+            .limit(limit);
         res.json(users);
     } catch (error) {
         console.error(error);
     }
 };
+
 
 export const profile = async(req, res) => {
     const { user } = req;
@@ -180,20 +186,25 @@ export const profile = async(req, res) => {
     res.json(user);
 }
 
-export const deleteUser = async (req, res) => {
+export const changeState = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const userToDelete = await User.findById(id).select("-password -createdAt -updatedAt-__v");
+        const userToUpdate = await User.findById(id).select("-password -createdAt -updatedAt-__v");
 
-        if (!userToDelete) {
+        if (!userToUpdate) {
             const error = new Error("El usuario no existe");
             return res.status(404).json({ msg: error.message });
         }
 
-        await userToDelete.deleteOne();
-        
-        res.json({ msg: "Usuario eliminado correctamente", user: userToDelete });
+        userToUpdate.isActive = !userToUpdate.isActive
+        const userSaved = await userToUpdate.save();
+
+        if(userToUpdate.isActive) {
+            res.json({msg: "Usuario activado correctamente", userSaved});
+        } else {
+            res.json({msg: "Usuario desactivado correctamente", userSaved});
+        }
     } catch (error) {
         console.error(error);
     }
