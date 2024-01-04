@@ -9,7 +9,7 @@ import {
     updateUser,
     getAllUsers,
     profile,
-    deleteUser
+    changeState
 } from "../controllers/User.controller.js"
 import { checkAuth } from "../middleware/checkAuth.js";
 
@@ -25,6 +25,6 @@ router.route("/forgot-password/:token")
     .post(newPassword);
 router.put("/edit/:id", checkAuth, updateUser);
 router.get("/profile", checkAuth, profile);
-router.delete("/delete/:id", checkAuth, deleteUser);
+router.put("/change-state/:id", checkAuth, changeState);
 
 export default router;
