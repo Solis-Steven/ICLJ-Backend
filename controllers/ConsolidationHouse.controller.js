@@ -11,9 +11,8 @@ export const getAllConsolidationHouses = async (req, res) => {
 };
 
 export const createConsolidationHouse = async (req, res) => {
- const { name, leader, date, address } = req.body;
+ const {name, leader, date, address} = req.body;
  const newConsolidationHouse = new ConsolidationHouse({ name, leader, date, address });
-
  try {
     await newConsolidationHouse.save();
     res.status(201).json(newConsolidationHouse);
@@ -25,29 +24,46 @@ export const createConsolidationHouse = async (req, res) => {
 export const getConsolidationHouse = async (req, res) => {
  try {
     const consolidationHouse = await ConsolidationHouse.findById(req.params.id);
-    res.status(200).json(consolidationHouse);
+    if (!consolidationHouse) {
+      return res.status(404).json({ message: 'ConsolidationHouse not found' });
+   }
+   res.status(200).json(consolidationHouse);
  } catch (error) {
     res.status(500).json({ message: error.message });
  }
 };
 
 export const updateConsolidationHouse = async (req, res) => {
+   const ConsolidationHouseToUpdate = await ConsolidationHouse.findById(req.params.id);
+
+   if(!ConsolidationHouseToUpdate) {
+       const error = new Error("The ConsolidationHouses doesn't exists");
+       return(res.status(404).json({msg: error.message}));
+   }
  const { name, leader, date, address } = req.body;
- const updatedConsolidationHouse = { name, leader, date, address };
+   ConsolidationHouseToUpdate.name = name || ConsolidationHouseToUpdate.name;
+    ConsolidationHouseToUpdate.leader = leader || ConsolidationHouseToUpdate.leader;
+    ConsolidationHouseToUpdate.date = date || ConsolidationHouseToUpdate.date;
+    ConsolidationHouseToUpdate.address = address || ConsolidationHouseToUpdate.address; 
 
  try {
-    await ConsolidationHouse.findByIdAndUpdate(req.params.id, updatedConsolidationHouse);
-    res.status(200).json({ message: 'ConsolidationHouse updated successfully' });
+   const ConsolidationHouseSaved = await ConsolidationHouseToUpdate.save();
+   res.json(ConsolidationHouseSaved)
  } catch (error) {
-    res.status(400).json({ message: error.message });
+   res.status(500).json({msg: "Internal Server Error"})
  }
 };
 
 export const deleteConsolidationHouse = async (req, res) => {
- try {
-    await ConsolidationHouse.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'ConsolidationHouse deleted successfully' });
- } catch (error) {
-    res.status(500).json({ message: error.message });
- }
-};
+   try {
+      const consolidationHouse = await ConsolidationHouse.findById(req.params.id);
+      if (!consolidationHouse) {
+         return res.status(404).json({ message: 'ConsolidationHouse not found' });
+      }
+  
+      await ConsolidationHouse.findByIdAndDelete(req.params.id);
+      res.status(200).json({ message: 'ConsolidationHouse deleted successfully' });
+   } catch (error) {
+      res.status(500).json({ message: error.message });
+   }
+  };
