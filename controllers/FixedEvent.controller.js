@@ -2,8 +2,12 @@ import FixedEvent from '../models/FixedEvent.model.js';
 
 export const getAllFixedEvents = async (req, res) => {
  try {
-    const fixedEvents = await FixedEvent.find();
-    res.status(200).json(fixedEvents);
+   const { page = 1, limit = 10} = req.query;
+    const fixedEvents = await FixedEvent.find()
+    .select("-createdAt -updatedAt -__v")
+    .skip((page - 1) * limit)
+    .limit(limit);
+    res.json(fixedEvents);
  } catch (error) {
     res.status(400).json({ message: error.message });
  }
@@ -68,8 +72,8 @@ export const updateFixedEvent = async (req, res) => {
 
 export const deleteFixedEvent = async (req, res) => {
  try {
-   const FixedEvent = await FixedEvent.findById(req.params.id);
-   if (!FixedEvent) {
+   const fixedEvent = await FixedEvent.findById(req.params.id);
+   if (!fixedEvent) {
       return res.status(404).json({ message: 'Evento fijo no encontrado' });
    }
     await FixedEvent.findByIdAndDelete(req.params.id);
