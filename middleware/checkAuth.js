@@ -11,18 +11,22 @@ export const checkAuth = async (req, res, next) => {
         try {
             token = req.headers.authorization.split(" ")[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRETE);
-
-            req.user = await User.findById(decoded.id).select("-password -confirmed -token -createdAt -updatedAt -__v");
-
-            return(next());
+            const userData = await User.findById(decoded.id);
+            
+            if(userData.role === "Administrador") {
+                req.user = userData;
+                return(next());
+            } else {
+                res.status(409).send({msg: "No tienes permisos"})
+            }
         } catch (error) {
             console.log(error);
-            return(res.status(404).json({msg: "There was an error"}));
+            return(res.status(404).json({msg: "Hubo un error"}));
         }
     }
 
     if(!token) {
-        const error = new Error("The token is not valid");
+        const error = new Error("El tóken no es válido");
         return(res.status(401).json({msg: error.message}));
     }
 
