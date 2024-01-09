@@ -3,7 +3,7 @@ import ConsolidationHouse from '../models/ConsolidationHouse.model.js';
 
 export const getAllConsolidationHouses = async (req, res) => {
  try {
-   const { page = 1, limit = 10, isActive = true } = req.query;
+   const { page = 1, limit = 10} = req.query;
     const consolidationHouses = await ConsolidationHouse.find()
     .select("-createdAt -updatedAt -__v")
     .skip((page - 1) * limit)
