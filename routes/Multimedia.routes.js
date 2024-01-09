@@ -6,13 +6,15 @@ import {
  updateMultimediaContent,
  deleteMultimediaContent,
 } from '../controllers/Multimedia.controller.js';
-
+import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 
-router.get('/', getAllMultimediaContents);
-router.post('/', createMultimediaContent);
-router.get('/:id', getMultimediaContent);
-router.put('/:id', updateMultimediaContent);
-router.delete('/:id', deleteMultimediaContent);
+router.route('/')
+    .get(checkAuth, getAllMultimediaContents)
+    .post(checkAuth,  createMultimediaContent)
+router.route('/:id')
+    .get(checkAuth,  getMultimediaContent)
+    .put(checkAuth, updateMultimediaContent)
+    .delete(checkAuth, deleteMultimediaContent);
 
 export default router;
