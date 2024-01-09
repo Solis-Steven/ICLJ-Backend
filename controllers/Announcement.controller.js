@@ -60,8 +60,8 @@ export const updateAnnouncement = async (req, res) => {
 
 export const deleteAnnouncement = async (req, res) => {
  try {
-   const Announcement = await Announcement.findById(req.params.id);
-   if(!Announcement) {
+   const announcement = await Announcement.findById(req.params.id);
+   if(!announcement) {
      return res.status(404).json({ message: 'Anuncio no encontrado' });
    }
     await Announcement.findByIdAndDelete(req.params.id);
