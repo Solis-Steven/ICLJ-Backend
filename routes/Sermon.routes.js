@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.route("/")
     .post(checkAuth, addSermon)
-    .get(checkAuth, getAllSermons)
+    .get(getAllSermons)
 router.route("/:id")
-    .get(checkAuth, getSermon)
+    .get(getSermon)
     .put(checkAuth, editSermon)
     .delete(checkAuth, deleteSermon);
 
