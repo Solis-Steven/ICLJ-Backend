@@ -72,7 +72,11 @@ export const getSermon = async (req, res) => {
 
 export const getAllSermons = async (req, res) => {
     try {
-        const sermons = await Sermon.find();
+        const { page = 1, limit = 10 } = req.query;
+        const sermons = await Sermon.find()
+            .sort({date: -1})
+            .skip((page - 1) * limit)
+            .limit(limit);
         res.json(sermons);
     } catch (error) {
         console.error(error);

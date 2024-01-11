@@ -3,10 +3,14 @@ import ConsolidationHouse from '../models/ConsolidationHouse.model.js';
 
 export const getAllConsolidationHouses = async (req, res) => {
  try {
-    const consolidationHouses = await ConsolidationHouse.find();
-    res.status(200).json(consolidationHouses);
+   const { page = 1, limit = 10} = req.query;
+    const consolidationHouses = await ConsolidationHouse.find()
+    .select("-createdAt -updatedAt -__v")
+    .skip((page - 1) * limit)
+    .limit(limit);
+    res.json(consolidationHouses);
  } catch (error) {
-    res.status(500).json({ message: error.message });
+   console.error(error);
  }
 };
 
@@ -47,6 +51,7 @@ export const updateConsolidationHouse = async (req, res) => {
     ConsolidationHouseToUpdate.address = address || ConsolidationHouseToUpdate.address; 
 
  try {
+   
    const ConsolidationHouseSaved = await ConsolidationHouseToUpdate.save();
    res.json(ConsolidationHouseSaved)
  } catch (error) {

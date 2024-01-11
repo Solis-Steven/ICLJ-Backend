@@ -15,9 +15,11 @@ const userSchema = mongoose.Schema({
         lowercase: true,
         validate: {
             validator: function (value) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const isGmail = /@gmail\.com$/.test(value);
+                return emailRegex.test(value) && isGmail;
             },
-            message: "El correo no es válido"
+            message: "El correo no es válido o no es una dirección de Gmail"
         }
     },
     password: {
@@ -58,9 +60,9 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isDesabled: {
+    isActive: {
         type: Boolean,
-        default: false
+        default: true
     }
 }, {
     timestamps: true
