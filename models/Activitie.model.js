@@ -47,12 +47,6 @@ const ActivitieContentSchema = new mongoose.Schema({
                 type: Boolean,
                 default: false,
                 required: true,
-                trim: true
-            },
-            state: {
-                type: Boolean,
-                default: true,
-                trim: true
             }
         }],
         default: [],
