@@ -14,6 +14,7 @@ export const createMultimediaContent = async (req, res) => {
     const multimediaContent = new MultimediaContent({
       name: req.body.name,
       ref: req.body.ref,
+      visible: req.body.visible, 
     });
     await multimediaContent.save();
 
@@ -47,6 +48,7 @@ export const updateMultimediaContent = async (req, res) => {
     
   multimediaToUpdate.name = name || multimediaToUpdate.name;
   multimediaToUpdate.ref = ref || multimediaToUpdate.ref;
+   multimediaToUpdate.visible = req.body.visible || multimediaToUpdate.visible;
   
  try {
    const multimediaSave = await multimediaToUpdate.save();
