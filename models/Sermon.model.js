@@ -9,6 +9,10 @@ const SermonSchema = new mongoose.Schema({
         type: Date,
         require: true
     },
+    summary: {
+        type: String,
+        require: true
+    },
     sermon: {
         type: String,
         require: true
