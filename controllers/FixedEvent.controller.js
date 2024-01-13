@@ -4,6 +4,7 @@ export const getAllFixedEvents = async (req, res) => {
  try {
    const { page = 1, limit = 10} = req.query;
     const fixedEvents = await FixedEvent.find()
+    .populate("manager", "name")
     .select("-createdAt -updatedAt -__v")
     .skip((page - 1) * limit)
     .limit(limit);
