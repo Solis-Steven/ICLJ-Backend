@@ -10,6 +10,7 @@ import testimonialRoutes from "./routes/Testimonial.routes.js";
 import sitesRoutes from "./routes/Site.routes.js";
 import activitiesRoutes from "./routes/Activitie.routes.js";
 import consolidationHousesRoutes from "./routes/ConsolidationHouse.routes.js";
+import multimediaRoutes from "./routes/Multimedia.routes.js";
 dotenv.config();
 const app = new express();
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/api/testimonials", testimonialRoutes)
 app.use("/api/sites", sitesRoutes)
 app.use("/api/activities", activitiesRoutes)
 app.use("/api/consolidationHouses", consolidationHousesRoutes)
+app.use("/api/multimedia", multimediaRoutes)
 
 
 
