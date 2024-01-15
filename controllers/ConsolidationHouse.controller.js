@@ -5,6 +5,7 @@ export const getAllConsolidationHouses = async (req, res) => {
  try {
    const { page = 1, limit = 10} = req.query;
     const consolidationHouses = await ConsolidationHouse.find()
+    .populate("leader", "name")
     .select("-createdAt -updatedAt -__v")
     .skip((page - 1) * limit)
     .limit(limit);
