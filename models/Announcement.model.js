@@ -4,7 +4,7 @@ const AnnouncementSchema = new mongoose.Schema({
  name: String,
  description: String,
  date: Date,
- image: String,
+ image: {type: String, required: true},
 });
 
 export default mongoose.model('Announcement', AnnouncementSchema);
