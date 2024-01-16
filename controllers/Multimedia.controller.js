@@ -19,6 +19,7 @@ export const createMultimediaContent = async (req, res) => {
       name: req.body.name,
       ref: req.body.ref,
       visible: req.body.visible,
+      type: req.body.type,
     });
     await multimediaContent.save();
 
@@ -48,10 +49,11 @@ export const updateMultimediaContent = async (req, res) => {
     const error = new Error("The multimedia Content doesn't exists");
     return res.status(404).json({ msg: error.message });
   }
-  const { name, ref, visible } = req.body;
+  const { name, ref, visible, type } = req.body;
   multimediaToUpdate.name = name || multimediaToUpdate.name;
   multimediaToUpdate.ref = ref || multimediaToUpdate.ref;
   multimediaToUpdate.visible = visible !== undefined ? Boolean(visible) : multimediaToUpdate.visible;
+  multimediaToUpdate.type = type || multimediaToUpdate.type;
   try {
     const multimediaSave = await multimediaToUpdate.save();
     res.json(multimediaSave);
