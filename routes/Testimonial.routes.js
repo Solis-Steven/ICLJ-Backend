@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.route("/")
     .post(checkAuth, addTestimonial)
-    .get(checkAuth, getAllTestimonials)
+    .get(getAllTestimonials)
 router.route("/:id")
     .get(checkAuth, getTestimonial)
     .put(checkAuth, editTestimonial)
