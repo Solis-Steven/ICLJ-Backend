@@ -17,6 +17,7 @@ export const addSite = async (req, res) => {
         const site = new SiteContent({
             name: req.body.name,
             address: req.body.address,
+            image: req.body.image,
         });
         await site.save();
         res.json({msg: "Site added successfully"})
@@ -26,8 +27,8 @@ export const addSite = async (req, res) => {
 };
 export const editSite = async (req, res) => {
     const { id } = req.params;
-    const { name, address } = req.body;
-    const updateSite = { name, address };
+    const { name, address, image } = req.body;
+    const updateSite = { name, address, image };
 
     const existingSite = await SiteContent.findById(id);
     if (!existingSite) {

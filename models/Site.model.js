@@ -16,6 +16,7 @@ const SiteContentSchema = new mongoose.Schema({
             message: "The address is not valid"
         }
     },
+    image: {type: String, required: true},
 });
 
 const SiteContent = mongoose.model('SiteContent', SiteContentSchema);
