@@ -4,6 +4,7 @@ const MultimediaContentSchema = new mongoose.Schema({
  name: String,
  ref: String,
  visible: Boolean,
+ type: String,
  
 });
 

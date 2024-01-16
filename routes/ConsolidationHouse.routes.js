@@ -10,10 +10,10 @@ import {
 import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 router.route('/')
-    .get(checkAuth, getAllConsolidationHouses)
+    .get(getAllConsolidationHouses)
     .post(checkAuth,  createConsolidationHouse)
 router.route('/:id')
-    .get(checkAuth,  getConsolidationHouse)
+    .get(getConsolidationHouse)
     .put(checkAuth, updateConsolidationHouse)
     .delete(checkAuth, deleteConsolidationHouse);
 

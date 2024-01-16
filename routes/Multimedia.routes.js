@@ -10,10 +10,10 @@ import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 
 router.route('/')
-    .get(checkAuth, getAllMultimediaContents)
+    .get(getAllMultimediaContents)
     .post(checkAuth,  createMultimediaContent)
 router.route('/:id')
-    .get(checkAuth,  getMultimediaContent)
+    .get(getMultimediaContent)
     .put(checkAuth, updateMultimediaContent)
     .delete(checkAuth, deleteMultimediaContent);
 

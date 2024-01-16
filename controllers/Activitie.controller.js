@@ -4,16 +4,10 @@ export const agendActivitie = async (req, res) => {
     try {
         const newActivitie = new ActivitieContent(req.body);
         await newActivitie.validate();
-
         await newActivitie.save();
-        res.json(newActivitie);
+        res.json({msg: "Actividad agregada correctamente"})
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ msg: error.message });
-        }
-
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+        return res.status(404).json({ msg: "Error al agendar la actividad" });
     }
 };
 
@@ -22,7 +16,7 @@ export const editActivitie = async (req, res) => {
     const existingActivitie = await ActivitieContent.findById(id);
     
     if (!existingActivitie) {
-        return res.status(404).json({ msg: "Activitie doesn't exists" });
+        return res.status(404).json({ msg: "La actividad no existe" });
     }
 
     try {
@@ -36,10 +30,10 @@ export const editActivitie = async (req, res) => {
 
         const updatedActivitie = await existingActivitie.save();
 
-        res.json(updatedActivitie);
+        res.json({msg: "Actividad agregada correctamente", updatedActivitie })
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+        return res.status(404).json({ msg: "Error al editar la actividad" });
     }
 }
 
@@ -51,13 +45,12 @@ export const deleteActivitie = async (req, res) => {
         const deletedActivitie = await ActivitieContent.findByIdAndDelete(id);
 
         if (!deletedActivitie) {
-            return res.status(404).json({ msg: "Activitie doesn't exists" });
+            return res.status(404).json({ msg: "Error actividad no encontrada" });
         }
 
         res.json(deletedActivitie);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+        return res.status(404).json({ msg: "Error al elimnar la actividad" });
     }
 }
 
@@ -66,45 +59,46 @@ export const getActivitie = async (req, res) => {
         const { id } = req.params;
         const Activities = await ActivitieContent.findById(id);
         if (!Activities) {
-            return res.status(404).json({ msg: 'Activitie not found' });
+            return res.status(404).json({ msg: 'Error actividad no encontrada' });
         }
         res.json(Activities);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+        return res.status(404).json({ msg: "Error al obtener la actividad" })
     }
 }
-
 export const getAllActivities = async (req, res) => {
     try {
-        const Activities = await ActivitieContent.find();
-        res.json(Activities);
+      const { page = 1, limit = 10} = req.query;
+       const activities = await ActivitieContent.find()
+       .select("-createdAt -updatedAt -__v")
+       .skip((page - 1) * limit)
+       .limit(limit);
+       res.json(activities);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });
+      console.error(error);
     }
-};
+   };
 export const addActivitieUser = async (req, res) => {
     const { id: activityId } = req.params;
     const { name, phone } = req.body;
     try {
         if ( !name || !phone === undefined) {
-            return res.status(400).json({ msg: "Invalid user data in the request body" });
+            return res.status(400).json({ msg: "Datos Invalidos" });
         }
         const user = { name, phone };
 
         const activity = await ActivitieContent.findById(activityId);
         if (!activity) {
-            return res.status(404).json({ msg: "Activity doesn't exist" });
+            return res.status(404).json({ msg: "No existe la actividad" });
         }
         if (!user) {
-            return res.status(400).json({ msg: "User is required in the request body" });
+            return res.status(400).json({ msg: "No existe el usuario de la actividad" });
         }
         activity.users.push(user);
         const updatedActivity = await activity.save();
-        res.json(updatedActivity);
+        res.json({msg: "Usuario agregado correctamente", updatedActivity })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Internal Server Error' });
+        res.status(500).json({ msg: 'Error al agregar al usuario a la actividad' });
     }
 };

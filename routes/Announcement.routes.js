@@ -9,10 +9,10 @@ import {
 import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 router.route('/')
-    .get(checkAuth, getAllAnnouncements)
+    .get(getAllAnnouncements)
     .post(checkAuth,  createAnnouncement)
 router.route('/:id')
-    .get(checkAuth,  getAnnouncement)
+    .get(getAnnouncement)
     .put(checkAuth, updateAnnouncement)
     .delete(checkAuth, deleteAnnouncement);
 export default router;
