@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.route("/")
     .post(checkAuth, agendActivitie)
-    .get(checkAuth, getAllActivities)
+    .get(getAllActivities)
 router.route("/:id")
     .get(checkAuth, getActivitie)
     .post(checkAuth, addActivitieUser)
