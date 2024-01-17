@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.route("/")
     .post(checkAuth, addSite)
-    .get(checkAuth, getAllSites)
+    .get(getAllSites)
 router.route("/:id")
     .put(checkAuth, editSite)
     .delete(checkAuth, deleteSite);
