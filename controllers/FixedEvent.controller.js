@@ -73,7 +73,7 @@ export const updateFixedEvent = async (req, res) => {
   fixedEventToUpdate.name = name || fixedEventToUpdate.name;
   fixedEventToUpdate.manager = manager || fixedEventToUpdate.manager;
   fixedEventToUpdate.date = date || fixedEventToUpdate.date;
-  fixedEventToUpdate.visible = visible || fixedEventToUpdate.visible;
+  fixedEventToUpdate.visible = visible !== undefined ? Boolean(visible) : fixedEventToUpdate.visible;
   try {
     const fixedEventSave = await fixedEventToUpdate.save();
       // Obtener el nombre del manager
