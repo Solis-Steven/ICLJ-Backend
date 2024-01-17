@@ -10,10 +10,10 @@ import { checkAuth } from "../middleware/checkAuth.js";
 const router = express.Router();
 
 router.route('/')
-    .get(checkAuth, getAllFixedEvents)
+    .get(getAllFixedEvents)
     .post(checkAuth,  createFixedEvent)
 router.route('/:id')
-    .get(checkAuth,  getFixedEvent)
+    .get(getFixedEvent)
     .put(checkAuth, updateFixedEvent)
     .delete(checkAuth, deleteFixedEvent);
 export default router;
