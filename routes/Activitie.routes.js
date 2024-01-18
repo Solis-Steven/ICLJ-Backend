@@ -16,7 +16,7 @@ router.route("/")
     .get(getAllActivities)
 router.route("/:id")
     .get(checkAuth, getActivitie)
-    .post(checkAuth, addActivitieUser)
+    .post(addActivitieUser)
     .put(checkAuth, editActivitie)
     .delete(checkAuth, deleteActivitie);
 
