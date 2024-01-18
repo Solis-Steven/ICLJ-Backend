@@ -19,8 +19,8 @@ export const addSite = async (req, res) => {
             address: req.body.address,
             image: req.body.image,
         });
-        await site.save();
-        res.json({msg: "Site added successfully"})
+        const siteData = await site.save();
+        res.json({msg: "Sede agregada correctamente", data:siteData})
     } catch (error) {
         return res.status(404).json({ msg: "Error al agregar la sede" });
     }
@@ -40,7 +40,7 @@ export const editSite = async (req, res) => {
             { $set: updateSite },
             { new: true }
         );
-        res.json({msg: "Site edited successfully", updated })
+        res.json({msg: "Sede editada correctamente", data:updated })
     } catch (error) {
         return res.status(404).json({ msg: "Error al editar la sede" });
     }
@@ -54,7 +54,7 @@ export const deleteSite = async (req, res) => {
                 return res.status(404).json({ msg: "La sede no existe" });
             }
     
-            res.json({msg: "Site deleted successfully"})
+            res.json({msg: "Sede eliminada correctamente"})
         } catch (error) {
             return res.status(404).json({ msg: "Error al eliminar la sede" });
         }

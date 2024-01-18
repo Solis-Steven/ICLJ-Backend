@@ -3,9 +3,8 @@ import ActivitieContent from '../models/Activitie.model.js';
 export const agendActivitie = async (req, res) => {
     try {
         const newActivitie = new ActivitieContent(req.body);
-        await newActivitie.validate();
-        await newActivitie.save();
-        res.json({msg: "Actividad agregada correctamente"})
+        const activity = await newActivitie.save();
+        res.json({msg: "Actividad agregada correctamente", data:activity})
     } catch (error) {
         return res.status(404).json({ msg: "Error al agendar la actividad" });
     }
@@ -39,7 +38,6 @@ export const editActivitie = async (req, res) => {
 
 export const deleteActivitie = async (req, res) => {
     const { id } = req.params;
-    console.log(id)
 
     try {
         const deletedActivitie = await ActivitieContent.findByIdAndDelete(id);
@@ -48,7 +46,7 @@ export const deleteActivitie = async (req, res) => {
             return res.status(404).json({ msg: "Error actividad no encontrada" });
         }
 
-        res.json(deletedActivitie);
+        res.json({msg: "Actividad eliminada correctamente"})
     } catch (error) {
         return res.status(404).json({ msg: "Error al elimnar la actividad" });
     }
