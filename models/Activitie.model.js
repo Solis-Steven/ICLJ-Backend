@@ -54,7 +54,7 @@ const ActivitieContentSchema = new mongoose.Schema({
             validator: function (value) {
                 return this.assistance || (Array.isArray(value) && value.every(item => item.assisted));
             },
-            message: "Can only add users if assistance is true"
+            message: "Solo se pueden agregar usuarios si las asistencia esta habilitada"
         }
     }
     

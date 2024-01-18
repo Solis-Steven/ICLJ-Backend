@@ -72,6 +72,7 @@ export const authenticate = async(req, res) => {
             name: user.name,
             email,
             role: user.role,
+            phone: user.phone,
             token: JWTGenerator(user._id)
         })
     } else {

@@ -14,7 +14,7 @@ router.route("/")
     .get(getAllSites)
 router.route("/:id")
     .put(checkAuth, editSite)
-    .delete(checkAuth, deleteSite);
+    .delete(checkAuth, deleteSite)                                                              ;
 
 
 export default router;

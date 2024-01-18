@@ -30,7 +30,7 @@ export const editActivitie = async (req, res) => {
 
         const updatedActivitie = await existingActivitie.save();
 
-        res.json({msg: "Actividad agregada correctamente", updatedActivitie })
+        res.json({msg: "Actividad editada correctamente", updatedActivitie })
 
     } catch (error) {
         return res.status(404).json({ msg: "Error al editar la actividad" });
@@ -78,12 +78,13 @@ export const getAllActivities = async (req, res) => {
       console.error(error);
     }
    };
+   
 export const addActivitieUser = async (req, res) => {
     const { id: activityId } = req.params;
     const { name, phone } = req.body;
     try {
-        if ( !name || !phone === undefined) {
-            return res.status(400).json({ msg: "Datos Invalidos" });
+        if (!name || phone === undefined) {
+            return res.status(400).json({ msg: "Datos Inválidos" });
         }
         const user = { name, phone };
 
@@ -99,6 +100,6 @@ export const addActivitieUser = async (req, res) => {
         res.json({msg: "Usuario agregado correctamente", updatedActivity })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Error al agregar al usuario a la actividad' });
+        res.status(500).json({ msg: 'Error al agregar al usuario a la actividad', error: error.message });
     }
 };
