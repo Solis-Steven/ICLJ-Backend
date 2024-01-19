@@ -4,7 +4,6 @@ const ActivitieContentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: false,
         trim: true
     },
     date: {
@@ -14,7 +13,7 @@ const ActivitieContentSchema = new mongoose.Schema({
             validator: function (value) {
                 return /^\d{4}-\d{2}-\d{2}$/.test(value);
             },
-            message: "The date is not in the correct format (yyyy-dd-mm)"
+            message: "La fecha no tiene un formato correcto (yyyy-dd-mm)"
         }
     },
     time: {
@@ -24,7 +23,7 @@ const ActivitieContentSchema = new mongoose.Schema({
             validator: function (value) {
                 return /^(2[0-3]|1[0-9]|0?[0-9]):[0-5][0-9]?$/.test(value.toLowerCase());
             },
-            message: "The time is not in the correct format (hh:mm)"
+            message: "La hora no tiene el formato correcto (hh:mm)"
         }
     },
     assistance: {
