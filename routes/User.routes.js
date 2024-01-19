@@ -12,6 +12,7 @@ import {
     changeState
 } from "../controllers/User.controller.js"
 import { checkAuth } from "../middleware/checkAuth.js";
+import { checkUsers } from "../middleware/checkUsers.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.route("/forgot-password/:token")
     .get(checkToken)
     .post(newPassword);
 router.put("/edit/:id", checkAuth, updateUser);
-router.get("/profile", checkAuth, profile);
+router.get("/profile", checkUsers, profile);
 router.put("/change-state/:id", checkAuth, changeState);
 
 export default router;
