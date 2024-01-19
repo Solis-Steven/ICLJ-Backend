@@ -4,7 +4,6 @@ const ActivitieContentSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: false,
         trim: true
     },
     date: {
