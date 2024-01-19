@@ -183,7 +183,7 @@ export const getAllUsers = async (req, res) => {
 
 export const profile = async(req, res) => {
     const { user } = req;
-
+    console.log("user", user)
     res.json(user);
 }
 
